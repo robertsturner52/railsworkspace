@@ -1,0 +1,14 @@
+/.bundle
+/db/*.sqlite3
+/db/*.sqlite3.journal
+/log/*.log
+/tmp
+*.ogg
+*.mp3
+*.mp4
+*.png
+*.jpeg
+*.jpg
+.sass-cache
+.DS_Store
+.idea
