@@ -1,5 +1,9 @@
 == README
 
+This is a web store that uses Ruby on Rails.
+Rails v 4.0.13
+and Ruby 2.0.0
+
 This README would normally document whatever steps are necessary to get the
 application up and running.
 

@@ -2,14 +2,62 @@
 <html>
 <head>
   <title>Depot</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= stylesheet_link_tag    "application", media: "all",
+    "data-turbolinks-track" => true %>
+  <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
   <%= csrf_meta_tags %>
 </head>
-<body class="<%= controller.controller_name %>">
+<body class='<%= controller.controller_name %>'>
+  <div id="banner">
+    <%= form_tag store_path, class: 'locale' do %>
+        <%= select_tag 'set_locale', options_for_select(LANGUAGES, I18n.locale.to_s), onchange: 'this.form.submit()' %>
+        <%= submit_tag 'submit' %>
+        <%= javascript_tag "$('.locale input').hide()" %>
+    <% end %>
+    <%= image_tag("logo.png") %>
+    <%= @page_title || t('.title') %>
+  </div>
+  <div id="disclaimer">
+    <p><%= t('.disclaimer') %></p>
+  </div>
+  <div id="columns">
+    <div id="side">
+      <div id="ad">
+        <h4>Check out our latest</h4>
+        <%= image_tag(Product.latest.image_url) %>
+        <h5><%= Product.latest.title %></h5>
+        <h5><%= number_to_currency(Product.latest.price) %></h5>
+      </div>
+      <% if @cart %>
+        <%= hidden_div_if(@cart.line_items.empty?, id: 'cart') do %>
+            <%= render @cart %>
+        <% end %>
+      <% end %>
+      <ul>
+        <li><a href="http://localhost:3000"><%= t('.home') %></a></li>
+        <li><a href="http://localhost:3000/faq"><%= t('.questions') %></a></li>
+        <li><a href="http://localhost:3000/news"><%= t('.news') %></a></li>
+        <li><a href="http://localhost:3000/contact"><%= t('.contact') %></a></li>
+        <li><p><%= t('.visits') %> = <%= @visits %></p></li>
+      </ul>
 
-<%= yield %>
+      <%= hidden_div_if(session[:user_id], id: 'login_welcome') do %>
+          <%= button_to 'Login Page', login_path, method: :get %>
+      <% end %>
 
+      <% if session[:user_id] %>
+        <p>Logged in as <%= @logged_in_user_name %></p>
+        <ul>
+          <li><%=link_to 'Orders', orders_path %></li>
+          <li><%=link_to 'Products', products_path %></li>
+          <li><%=link_to 'Users', users_path %></li>
+        </ul>
+        <%= button_to 'Logout', logout_path, method: :delete %>
+      <% end %>
+    </div>
+    <div id="main">
+      <%= yield %>
+    </div>
+  </div>
 </body>
 </html>
-
